@@ -7,11 +7,13 @@ namespace Code.Utils.Pooling
     {
         private GameObject _prefab;
         private List<GameObject> _poolList;
+        private Transform _parent;
 
-        public SimpleObjectPool(GameObject prefab, int initialSize)
+        public SimpleObjectPool(GameObject prefab, int initialSize, Transform parent)
         {
             this._prefab = prefab;
             this._poolList = new List<GameObject>(initialSize);
+            this._parent = parent;
 
             InitializePool(initialSize);
         }
@@ -26,7 +28,7 @@ namespace Code.Utils.Pooling
 
         private GameObject CreateObject()
         {
-            GameObject obj = Object.Instantiate(_prefab);
+            GameObject obj = Object.Instantiate(_prefab, _parent);
             obj.SetActive(false);
             _poolList.Add(obj);
             return obj;

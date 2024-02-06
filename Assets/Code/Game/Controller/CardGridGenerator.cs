@@ -1,3 +1,5 @@
+using System;
+using Code.Utils.Pooling;
 using UnityEngine;
 
 namespace Code.Game.Controller
@@ -12,6 +14,14 @@ namespace Code.Game.Controller
         private readonly float _cardLength = 0.3f;
         private readonly float _edgePadding = 2f;
         private readonly float _topPadding = 1.5f;
+        
+        private IObjectPoolManager _objectPoolManager;
+
+        private void Awake()
+        {
+            _objectPoolManager = ObjectPoolManager.Instance;
+            _objectPoolManager.CreatePool(cardPrefab.name, cardPrefab, 25 );
+        }
 
         private void Start()
         {
@@ -36,7 +46,8 @@ namespace Code.Game.Controller
                 var position = new Vector3(posX, posY, 0f);
                 var rotation = Quaternion.identity;
 
-                var card = Instantiate(cardPrefab, position, rotation);
+                var card = _objectPoolManager.GetObjectFromPool(cardPrefab.name, position, rotation);
+                card.transform.SetParent(transform);
             }
         }
 
