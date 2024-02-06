@@ -1,27 +1,27 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.Game.Card
 {
     public class GameCard : MonoBehaviour, IGameCard
     {
+        [SerializeField] private SpriteRenderer cardImg; 
         public void Flip()
         {
-            throw new System.NotImplementedException();
         }
 
-        public void SetIcon()
+        public void SetIcon(Sprite sprite)
         {
-            throw new System.NotImplementedException();
+            cardImg.sprite = sprite;
         }
 
         public void Match()
         {
-            throw new System.NotImplementedException();
         }
 
-        public void GetName()
+        public string GetName()
         {
-            throw new System.NotImplementedException();
+            return "";
         }
     }
 }

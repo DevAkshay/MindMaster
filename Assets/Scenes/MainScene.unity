@@ -624,9 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2202494551835978790, guid: f9565b1fb0e0f40d1b7eaa35100d41be, type: 3}
-  rows: 3
-  columns: 3
-  cardSpacing: 1.6
+  cardSpacing: 1.8
 --- !u!1001 &2224508941007431278
 PrefabInstance:
   m_ObjectHideFlags: 0

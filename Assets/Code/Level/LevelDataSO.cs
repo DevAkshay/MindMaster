@@ -9,7 +9,7 @@ namespace Core.Level
     {
         public int RowCount;
         public int ColumnCount;
-        public Sprite[] CardImages;
+        public List<Sprite> CardSprites;
     }
 }
 

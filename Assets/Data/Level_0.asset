@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RowCount: 2
   ColumnCount: 2
-  CardImages:
+  CardSprites:
   - {fileID: 21300000, guid: 20b6ff486d68740ea87405f664e37346, type: 3}
   - {fileID: 21300000, guid: 4020a6a054b084909adc77ab1f8f495c, type: 3}
