@@ -32,7 +32,7 @@ namespace Code.UI.Screens
             scoreValueText.text = "0";
             attemptProgressImage.fillAmount = 1;
 
-            var levelData = LevelManager.Instance.GetLevel(PlayerDataManager.Instance.currentLevel);
+            var levelData = LevelManager.Instance.GetLevel(PlayerDataManager.Instance.ActiveLevelIndex);
             _totalAttempts = levelData.NumberOfAttempts;
             attemptProgressCountText.text = "0/" + _totalAttempts;
         }

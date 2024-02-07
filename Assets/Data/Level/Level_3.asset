@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6d2f7f983bc4abe87043b9c5852123, type: 3}
+  m_Name: Level_3
+  m_EditorClassIdentifier: 
+  PointsPerMatch: 3
+  NumberOfAttempts: 7
+  RowCount: 4
+  ColumnCount: 3
+  CardSprites:
+  - {fileID: 21300000, guid: 53cd722fa014f4db584de793699bcbbc, type: 3}
+  - {fileID: 21300000, guid: 6aea349338ae8419fac092e8b2101821, type: 3}
+  - {fileID: 21300000, guid: 7796f08dc38e4481da1b92c660905f85, type: 3}
+  - {fileID: 21300000, guid: a2772aced7ff64b49a3a5d7ae8a2c698, type: 3}
+  - {fileID: 21300000, guid: a798dd3456e194c128c062a2d950ac3b, type: 3}
+  - {fileID: 21300000, guid: 9449b762a37ba45c4a39d89195b39780, type: 3}
+  - {fileID: 21300000, guid: d80fb507b65a045209ebd763f0741f86, type: 3}
+  - {fileID: 21300000, guid: 797e1f315360a4813b51bf20d16bbe62, type: 3}
+  - {fileID: 21300000, guid: 7bd31d54ebaa54ade964d97984414938, type: 3}

@@ -58,7 +58,11 @@ namespace Code.Game.Card
         public void SetAsMatched()
         {
             IsMatched = true;
+            ReleaseCardToPool();
+        }
 
+        public void ReleaseCardToPool()
+        {
             Pool.ReleaseObject(gameObject);
         }
 

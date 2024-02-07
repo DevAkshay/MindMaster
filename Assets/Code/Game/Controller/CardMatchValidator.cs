@@ -13,7 +13,7 @@ namespace Code.Game.Controller
     {
         public Action OnPairMatched;
         public Action OnPairMismatched;
-        public Action OnGameOver;
+        public Action<bool> OnGameOver;
 
         private List<GameCard> _generatedCards;
         
@@ -115,7 +115,12 @@ namespace Code.Game.Controller
             if (!IsTurnAllowed() || IsLevelCleared())
             {
                 Reset();
-                OnGameOver?.Invoke();
+                foreach (var card in _generatedCards)
+                {
+                    card.ReleaseCardToPool();
+                }
+                
+                OnGameOver?.Invoke(IsLevelCleared());
             }
         }
         

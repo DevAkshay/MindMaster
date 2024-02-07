@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Code.Game.Card;
 using Code.Level;
@@ -16,17 +17,19 @@ namespace Code.Game.Controller
 
         private readonly float _cardLength = 0.3f;
         private readonly float _edgePadding = 2f;
-        private readonly float _topPadding = 1.5f;
+        private readonly float _topPadding = 1.2f;
 
         private IObjectPoolManager _objectPoolManager;
         private List<GameCard> _generatedCards;
-        
-        
-        public void Initialize(LevelDataSO levelData)
+
+        private void Start()
         {
             _objectPoolManager = ObjectPoolManager.Instance;
             _objectPoolManager.CreatePool(cardPrefab.name, cardPrefab, 25);
+        }
 
+        public void Initialize(LevelDataSO levelData)
+        {
             GenerateCardGrid(levelData.RowCount, levelData.ColumnCount);
             AssignSpritesToCards(levelData);
             AdjustCamera(levelData.RowCount, levelData.ColumnCount);
@@ -96,7 +99,7 @@ namespace Code.Game.Controller
 
             // Shuffle the list of selected images
             Utilities.Shuffle(selectedImages);
-            
+
             // Assign each card in the grid a sprite from the shuffled list of images
             for (var i = 0; i < _generatedCards.Count; i++)
             {
