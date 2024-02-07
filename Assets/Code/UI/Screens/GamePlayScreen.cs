@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Code.Game.Core;
 using Code.Level;
 using Code.Player;
@@ -7,7 +6,7 @@ using MPUIKIT;
 using TMPro;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.UI.Screens
 {
     public class GamePlayScreen : ScreenBase
     {
@@ -17,7 +16,9 @@ namespace Code.UI
         [SerializeField] private MPImage attemptProgressImage;
 
         private int _totalAttempts;
-        private int currentDisplayedScore = 0;
+        private int _currentDisplayedScore;
+        
+        private Coroutine _scoreAnimationCoroutine;
 
         public override void OnShow()
         {
@@ -51,48 +52,51 @@ namespace Code.UI
 
         private void GameEventsOnAttemptCountUpdated(int remainingAttempts)
         {
-            int attemptsUsed = _totalAttempts - remainingAttempts;
+            var attemptsUsed = _totalAttempts - remainingAttempts;
 
             attemptProgressCountText.text = $"{attemptsUsed}/{_totalAttempts}";
 
-            float progress = 1 - ((float)attemptsUsed / _totalAttempts); 
-            attemptProgressImage.fillAmount = progress; 
+            var progress = 1 - (float)attemptsUsed / _totalAttempts;
+            attemptProgressImage.fillAmount = progress;
         }
 
 
-        private void GameEventsOnComboAchieved(int obj)
+        private void GameEventsOnComboAchieved(int comboCount)
         {
-            //TODO show a combo recieved animation
+            Debug.Log($"{comboCount} x Combo");
         }
 
         private void GameEventsOnScoreChanged(int newScore)
         {
-            StopCoroutine("AnimateScoreChange");
-            StartCoroutine(AnimateScoreChange(newScore));
+            if (_scoreAnimationCoroutine != null)
+            {
+                StopCoroutine(_scoreAnimationCoroutine);
+            }
+            _scoreAnimationCoroutine = StartCoroutine(AnimateScoreChange(newScore));
         }
-        
+
         private IEnumerator AnimateScoreChange(int newScore)
         {
             // Time it takes to count to the new score
-            float duration = 1.0f;
+            var duration = 1.0f;
             float counter = 0;
 
-            int startScore = currentDisplayedScore;
+            var startScore = _currentDisplayedScore;
 
             while (counter < duration)
             {
                 counter += Time.deltaTime;
-                float t = Mathf.Clamp01(counter / duration);
-                
-                currentDisplayedScore = (int)Mathf.Lerp(startScore, newScore, t);
-                scoreValueText.text = currentDisplayedScore.ToString();
+                var t = Mathf.Clamp01(counter / duration);
 
-                yield return null; 
+                _currentDisplayedScore = (int)Mathf.Lerp(startScore, newScore, t);
+                scoreValueText.text = _currentDisplayedScore.ToString();
+
+                yield return null;
             }
 
             // Ensure the final score is set correctly after the animation
-            currentDisplayedScore = newScore;
-            scoreValueText.text = currentDisplayedScore.ToString();
+            _currentDisplayedScore = newScore;
+            scoreValueText.text = _currentDisplayedScore.ToString();
         }
 
         private void UnsubscribeGameEvents()

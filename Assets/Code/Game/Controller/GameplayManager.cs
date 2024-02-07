@@ -1,8 +1,11 @@
 using System;
+using Code.Game.Core;
+using Code.Game.Main;
 using Code.Level;
 using Code.Player;
 using Code.Score;
 using Code.UI;
+using Code.UI.Screens;
 using Code.Utils;
 using UnityEngine;
 
@@ -15,7 +18,20 @@ namespace Code.Game.Controller
 
         private void Start()
         {
-            StartGamePlay();
+            GameEvents.GameStateChange += GameEventsOnGameStateChange;
+        }
+
+        private void OnDestroy()
+        {
+            GameEvents.GameStateChange -= GameEventsOnGameStateChange;
+        }
+
+        private void GameEventsOnGameStateChange(GameState gameState)
+        {
+            if (gameState == GameState.Gameplay)
+            {
+                StartGamePlay();
+            }
         }
 
         private void StartGamePlay()
@@ -46,9 +62,8 @@ namespace Code.Game.Controller
 
         private void OnGameOver()
         {
-            //Testing
             PlayerDataManager.Instance.currentLevel++;
-            StartGamePlay();
+            GameFlowManager.Instance.ChangeState(GameState.Result);
         }
 
         private void EndGamePlay()
