@@ -65,6 +65,8 @@ namespace Code.Utils.Pooling
         {
             obj.SetActive(false);
             obj.transform.SetParent(_parent);
+            var poolObject = obj.GetComponent<IPoolObject>();
+            poolObject?.OnObjectReturned();
         }
 
         public void ClearPool()

@@ -60,7 +60,7 @@ namespace Code.Game.Main
         private IEnumerator HandleSplashScreen()
         {
             _screenManager.ShowScreen<SplashScreen>();
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(2);
             _screenManager.HideScreen<SplashScreen>();
             ChangeState(GameState.MainMenu);
         }

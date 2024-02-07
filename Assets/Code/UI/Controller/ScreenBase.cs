@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.UI.Controller
 {
     public abstract class ScreenBase : MonoBehaviour
     {

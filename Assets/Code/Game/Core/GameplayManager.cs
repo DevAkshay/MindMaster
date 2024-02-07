@@ -20,6 +20,9 @@ namespace Code.Game.Core
         private PlayerDataManager PlayerDataManager => PlayerDataManager.Instance;
         private ScoreManager ScoreManager => ScoreManager.Instance;
 
+        public PlayerLevelData GameResultData {get; private set; }
+        public int LevelIndex { get; private set; }
+
         private void Start()
         {
             GameEvents.GameStateChange += GameEventsOnGameStateChange;
@@ -37,17 +40,18 @@ namespace Code.Game.Core
 
         private void StartGamePlay()
         {
-            var levelData = LevelManager.Instance.GetLevel(PlayerDataManager.ActiveLevelIndex);
+            LevelIndex = PlayerDataManager.ActiveLevelIndex;
+            var levelData = LevelManager.Instance.GetLevel(LevelIndex);
             if (levelData == null)
             {
-                Debug.LogError($"Level data of Level index {PlayerDataManager.ActiveLevelIndex} is null");
+                Debug.LogError($"Level data of Level index {LevelIndex} is null");
                 return;
             }
 
             if (!IsLevelGridSizeValid(levelData))
             {
                 Debug.LogError(
-                    $"Level data grid size not an even number, recheck the level index : {PlayerDataManager.ActiveLevelIndex} data");
+                    $"Level data grid size not an even number, recheck the level index : {LevelIndex} data");
                 return;
             }
 
@@ -87,13 +91,12 @@ namespace Code.Game.Core
 
         private void OnGameOver(bool isLevelComplete)
         {
-            GameFlowManager.Instance.ChangeState(GameState.Result);
-            var result = new PlayerLevelData(PlayerDataManager.ActiveLevelIndex, ScoreManager.Score, isLevelComplete, false);
-            PlayerDataManager.SavePlayerResult(result);
-            ScoreManager.ResetScoreAndCombos();
+            GameResultData = new PlayerLevelData(LevelIndex, ScoreManager.Score, isLevelComplete);
+            PlayerDataManager.SavePlayerResult(GameResultData);
             cardMatchValidator.OnGameOver -= OnGameOver;
             cardMatchValidator.OnPairMatched -= OnCardMatch;
             cardMatchValidator.OnPairMismatched -= OnCardMiss;
+            GameFlowManager.Instance.ChangeState(GameState.Result);
         }
     }
 }

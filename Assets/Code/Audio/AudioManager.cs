@@ -57,8 +57,7 @@ namespace Code.Audio
                 Debug.LogError($"Audio clip is null for id : {audioId}");
                 return;
             }
-            Debug.LogError("PlaySfx 2 "+clip.name);
-
+            
             var sfxObject = _objectPoolManager.GetObjectFromPool("SFX", transform.position, Quaternion.identity);
             sfxObject.transform.SetParent(transform);
             var sfxSource = sfxObject.GetComponent<AudioSource>();

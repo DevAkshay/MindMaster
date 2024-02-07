@@ -3,6 +3,7 @@ using Code.Audio;
 using Code.Game.Core;
 using Code.Level;
 using Code.Player;
+using Code.UI.Controller;
 using MPUIKIT;
 using TMPro;
 using UnityEngine;
@@ -12,9 +13,11 @@ namespace Code.UI.Screens
     public class GamePlayScreen : ScreenBase
     {
         [SerializeField] private TMP_Text attemptDescriptionText;
+        [SerializeField] private TMP_Text currentLevelText;
         [SerializeField] private TMP_Text attemptProgressCountText;
         [SerializeField] private TMP_Text scoreValueText;
         [SerializeField] private MPImage attemptProgressImage;
+        [SerializeField] private ComboController comboController;
 
         private int _totalAttempts;
         private int _currentDisplayedScore;
@@ -25,6 +28,7 @@ namespace Code.UI.Screens
         {
             base.OnShow();
             Initialize();
+            comboController.Initialize();
             SubscribeGameEvents();
         }
 
@@ -33,9 +37,13 @@ namespace Code.UI.Screens
             scoreValueText.text = "0";
             attemptProgressImage.fillAmount = 1;
 
-            var levelData = LevelManager.Instance.GetLevel(PlayerDataManager.Instance.ActiveLevelIndex);
+            var activeLevelIndex = PlayerDataManager.Instance.ActiveLevelIndex;
+            var levelData = LevelManager.Instance.GetLevel(activeLevelIndex);
             _totalAttempts = levelData.NumberOfAttempts;
+
+            currentLevelText.text = (activeLevelIndex + 1).ToString();
             attemptProgressCountText.text = "0/" + _totalAttempts;
+            attemptDescriptionText.text = $"You have {_totalAttempts} attempts to match all cards";
         }
 
         public override void OnHide()
@@ -56,6 +64,7 @@ namespace Code.UI.Screens
             var attemptsUsed = _totalAttempts - remainingAttempts;
 
             attemptProgressCountText.text = $"{attemptsUsed}/{_totalAttempts}";
+            attemptDescriptionText.text = $"You have {remainingAttempts} attempts to match all cards";
 
             var progress = 1 - (float)attemptsUsed / _totalAttempts;
             attemptProgressImage.fillAmount = progress;
@@ -64,7 +73,7 @@ namespace Code.UI.Screens
 
         private void GameEventsOnComboAchieved(int comboCount)
         {
-            Debug.Log($"{comboCount} x Combo");
+            comboController.ShowCombo(comboCount);
         }
 
         private void GameEventsOnScoreChanged(int newScore)
@@ -79,7 +88,7 @@ namespace Code.UI.Screens
         private IEnumerator AnimateScoreChange(int newScore)
         {
             // Time it takes to count to the new score
-            var duration = 1.0f;
+            var duration = 0.3f;
             float counter = 0;
 
             var startScore = _currentDisplayedScore;

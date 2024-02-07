@@ -27,6 +27,7 @@ namespace Code.Score
 
         public void Init(LevelDataSO levelData)
         {
+            ResetScoreAndCombos();
             _pointsPerCardMatch = levelData.PointsPerMatch;
         }
         
@@ -47,7 +48,7 @@ namespace Code.Score
             ResetCombo();
         }
 
-        public void ResetScoreAndCombos()
+        private void ResetScoreAndCombos()
         {
             Score = 0;
             ResetCombo();

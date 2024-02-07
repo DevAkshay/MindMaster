@@ -15,21 +15,24 @@ namespace Code.Game.Controller
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private float cardSpacing = 1.6f;
 
-        private readonly float _cardLength = 0.3f;
+        private readonly float _cardLength = 0.4f;
         private readonly float _edgePadding = 2f;
         private readonly float _topPadding = 1.2f;
 
         private IObjectPoolManager _objectPoolManager;
         private List<GameCard> _generatedCards;
+        private Camera _mainCamera;
 
-        private void Start()
+        private void Awake()
         {
+            _mainCamera = Camera.main;
             _objectPoolManager = ObjectPoolManager.Instance;
             _objectPoolManager.CreatePool(cardPrefab.name, cardPrefab, 25);
         }
 
         public void Initialize(LevelDataSO levelData)
         {
+            _generatedCards = new List<GameCard>(levelData.RowCount * levelData.ColumnCount);
             GenerateCardGrid(levelData.RowCount, levelData.ColumnCount);
             AssignSpritesToCards(levelData);
             AdjustCamera(levelData.RowCount, levelData.ColumnCount);
@@ -45,39 +48,32 @@ namespace Code.Game.Controller
             var gridWidth = columns * cardSpacing;
             var gridHeight = rows * cardSpacing;
 
-            var startX = -gridWidth / 2 + cardSpacing / 2;
-            var startY = gridHeight / 2 - cardSpacing / 2 - _topPadding;
+            Vector3 startPosition = new Vector3(-gridWidth / 2 + cardSpacing / 2, gridHeight / 2 - cardSpacing / 2 - _topPadding, 0f);
             
-            _generatedCards = new List<GameCard>();
-            for (var row = 0; row < rows; row++)
-            for (var col = 0; col < columns; col++)
+            for (int row = 0; row < rows; row++)
             {
-                var posX = startX + col * cardSpacing;
-                var posY = startY - row * cardSpacing;
-
-                var position = new Vector3(posX, posY, 0f);
-                var rotation = Quaternion.identity;
-
-                var card = _objectPoolManager.GetObjectFromPool(cardPrefab.name, position, rotation);
-                card.transform.SetParent(transform);
-                var gameCard = card.GetComponent<GameCard>();
-                _generatedCards.Add(gameCard);
+                for (int col = 0; col < columns; col++)
+                {
+                    Vector3 position = startPosition + new Vector3(col * cardSpacing, -row * cardSpacing, 0f);
+                    var card = _objectPoolManager.GetObjectFromPool(cardPrefab.name, position, Quaternion.identity);
+                    card.transform.SetParent(transform);
+                    _generatedCards.Add(card.GetComponent<GameCard>());
+                }
             }
         }
 
         private void AdjustCamera(int rows, int columns)
         {
-            var cam = Camera.main;
             var totalCardWidth = columns * _cardLength + (columns - 1) * cardSpacing;
             var totalCardHeight = rows * _cardLength + (rows - 1) * cardSpacing;
 
             var desiredWidth = totalCardWidth + _edgePadding;
             var desiredHeight = totalCardHeight + _edgePadding + _topPadding;
-            if (cam != null)
+            
+            if (_mainCamera != null)
             {
-                var aspectRatio = cam.aspect;
-                var newOrthographicSize = Mathf.Max(desiredHeight / 2, desiredWidth / (2 * aspectRatio));
-                cam.orthographicSize = newOrthographicSize;
+                var aspectRatio = _mainCamera.aspect;
+                _mainCamera.orthographicSize = Mathf.Max(desiredHeight / 2, desiredWidth / (2 * aspectRatio));
             }
         }
 
@@ -93,11 +89,9 @@ namespace Code.Game.Controller
             for (var i = 0; i < numCardsNeeded; i++)
             {
                 selectedImages.Add(cardSprites[i]);
-                // Add a duplicate for matching pairs
                 selectedImages.Add(cardSprites[i]); 
             }
 
-            // Shuffle the list of selected images
             Utilities.Shuffle(selectedImages);
 
             // Assign each card in the grid a sprite from the shuffled list of images

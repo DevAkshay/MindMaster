@@ -103,6 +103,11 @@ namespace Code.Game.Card
         }
 
 
+        public void OnObjectReturned()
+        {
+            
+        }
+
         public void OnObjectInit()
         {
             Reset();

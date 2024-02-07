@@ -11,14 +11,12 @@ namespace Code.Player
         public int levelNumberIndex;
         public int score;
         public bool isCompleted;
-        public bool isActiveLevel;
 
-        public PlayerLevelData(int levelNumberIndex, int score, bool isCompleted, bool isActiveLevel)
+        public PlayerLevelData(int levelNumberIndex, int score, bool isCompleted)
         {
             this.levelNumberIndex = levelNumberIndex;
             this.score = score;
             this.isCompleted = isCompleted;
-            this.isActiveLevel = isActiveLevel;
         }
     }
 
@@ -47,7 +45,7 @@ namespace Code.Player
             {
                 var initialLevelData = new List<PlayerLevelData>
                 {
-                    new PlayerLevelData(0, 0, false, true)
+                    new PlayerLevelData(0, 0, false)
                 };
                 SetAllLevelData(initialLevelData);
                 _activeLevelIndex = 0;
@@ -59,7 +57,7 @@ namespace Code.Player
         }
 
 
-        public List<PlayerLevelData> GetAllLevelData()
+        private List<PlayerLevelData> GetAllLevelData()
         {
             string jsonString = PlayerPrefs.GetString(LevelDataKey, "");
             if (string.IsNullOrEmpty(jsonString)) return new List<PlayerLevelData>();
@@ -68,7 +66,7 @@ namespace Code.Player
             return levelDataList?.levelDataList ?? new List<PlayerLevelData>();
         }
 
-        public void SetAllLevelData(List<PlayerLevelData> levelDataList)
+        private void SetAllLevelData(List<PlayerLevelData> levelDataList)
         {
             PlayerLevelDataList wrapper = new PlayerLevelDataList { levelDataList = levelDataList };
             string jsonString = JsonUtility.ToJson(wrapper);
@@ -90,7 +88,7 @@ namespace Code.Player
                 levelDataList.Add(newResult); // Add new result if not found
             }
             SetAllLevelData(levelDataList);
-            if (newResult.isActiveLevel)
+            if (!newResult.isCompleted)
             {
                 _activeLevelIndex = newResult.levelNumberIndex; // Update cached active level if this result is for the active level
             }
@@ -101,7 +99,7 @@ namespace Code.Player
         private void UpdateCachedActiveLevel()
         {
             List<PlayerLevelData> levelDataList = GetAllLevelData();
-            PlayerLevelData activeLevel = levelDataList.Find(level => level.isActiveLevel);
+            PlayerLevelData activeLevel = levelDataList.Find(level => !level.isCompleted);
 
             if (activeLevel != null)
             {
