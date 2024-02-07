@@ -55,6 +55,11 @@ namespace Code.Utils.Pooling
             // If no inactive object found, create a new one
             if (obj == null) obj = CreateObject();
 
+            var poolObject = obj.GetComponent<IPoolObject>();
+            if (poolObject != null)
+            {
+                poolObject.OnObjectInit();
+            }
             obj.SetActive(true);
             return obj;
         }

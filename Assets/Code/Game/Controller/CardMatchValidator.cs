@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Game.Card;
 using Core.Level;
 using UnityEngine;
@@ -11,16 +12,26 @@ namespace Code.Game.Controller
     {
         public Action OnPairMatched;
         public Action OnPairMismatched;
-        public Action OnGameover;
+        public Action OnGameOver;
 
         private List<GameCard> _generatedCards;
-        private LevelDataSO _activeLevelData;
-        private readonly Queue<GameCard> _cardQueue = new();
+        
+        private int _remainingTurns;
+        private int _allowedTurnsCount;
+        private int _currentTurnCount;
+        
+        private GameCard _firstSelectedCard;
+        private GameCard _secondSelectedCard;
+        
+        private float _matchCheckDelay = 0.6f;
+        
+        private enum GameState { Ready, CheckingMatch, Paused }
+        private GameState _currentState = GameState.Ready;
 
         public void Initialize(List<GameCard> generatedCards, LevelDataSO levelData)
         {
             _generatedCards = generatedCards;
-            _activeLevelData = levelData;
+            _allowedTurnsCount = _remainingTurns = levelData.NumberOfTurns;
             RegisterForCardClick();
         }
 
@@ -29,49 +40,84 @@ namespace Code.Game.Controller
             foreach (var card in _generatedCards)
             {
                 card.OnCardClick += OnCardClick;
-                card.OnCardShown += OnCardFlipComplete;
             }
-        }
-
-        private void OnCardFlipComplete()
-        {
-            StartCoroutine(CheckForMatch());
         }
 
         private void OnCardClick(GameCard gameCard)
         {
+            if (!IsTurnAllowed()) return;
+            if (_currentState != GameState.Ready || gameCard == _firstSelectedCard) return;
+
             gameCard.Flip();
-            _cardQueue.Enqueue(gameCard);
+            if (_firstSelectedCard == null)
+            {
+                _firstSelectedCard = gameCard;
+            }
+            else
+            {
+                _secondSelectedCard = gameCard;
+                _currentState = GameState.CheckingMatch;
+                Invoke(nameof(CheckForMatch), _matchCheckDelay);
+            }
         }
 
-        private IEnumerator CheckForMatch()
+        private void CheckForMatch()
         {
-            if (_cardQueue.Count < 2) yield break;
-            var firstClickedCard = _cardQueue.Dequeue();
-            var secondClickedCard = _cardQueue.Dequeue();
-            yield return new WaitForSeconds(0.2f);
-            if (firstClickedCard.Match(secondClickedCard.GetName()))
+            UpdateOnTurnCount();
+
+            if (_firstSelectedCard.Match(_secondSelectedCard.GetName()))
             {
-                firstClickedCard.SetAsMatched();
-                secondClickedCard.SetAsMatched();
-                
-                firstClickedCard.OnCardClick -= OnCardClick;
-                secondClickedCard.OnCardClick -= OnCardClick;
-                
-                OnPairMatched?.Invoke();
+                HandleMatch();
             }
             else
             {
-                firstClickedCard.Flip();
-                secondClickedCard.Flip();
-                
-                OnPairMismatched?.Invoke();
+                HandleMismatch();
             }
 
-            if (_cardQueue.Count >= 2)
-                StartCoroutine(CheckForMatch());
-            else
-                OnGameover?.Invoke();
+            _firstSelectedCard = null;
+            _secondSelectedCard = null;
+            _currentState = GameState.Ready;
+
+            CheckAboutGameOver();
+        }
+        
+        private void HandleMatch()
+        {
+            _firstSelectedCard.SetAsMatched();
+            _secondSelectedCard.SetAsMatched();
+            OnPairMatched?.Invoke();
+        }
+
+        private void HandleMismatch()
+        {
+            _firstSelectedCard.Flip();
+            _secondSelectedCard.Flip();
+            OnPairMismatched?.Invoke();
+        }
+
+        
+        private void UpdateOnTurnCount()
+        {
+            _currentTurnCount++;
+            _remainingTurns = _allowedTurnsCount - _currentTurnCount;
+        }
+
+        private void CheckAboutGameOver()
+        {
+            if (!IsTurnAllowed() || IsLevelCleared())
+            {
+                OnGameOver?.Invoke();
+            }
+        }
+        
+        private bool IsTurnAllowed()
+        {
+            return _remainingTurns > 0;
+        }
+
+        private bool IsLevelCleared()
+        {
+            return _generatedCards.TrueForAll(card => card.IsMatched);
         }
     }
 }

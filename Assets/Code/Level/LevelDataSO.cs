@@ -7,6 +7,7 @@ namespace Core.Level
     [CreateAssetMenu(menuName = "Level Data", fileName = "New Level Data")]
     public class LevelDataSO : ScriptableObject
     {
+        public int NumberOfTurns;
         public int RowCount;
         public int ColumnCount;
         public List<Sprite> CardSprites;

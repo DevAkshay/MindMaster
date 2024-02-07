@@ -9,20 +9,22 @@ namespace Code.Game.Card
     {
         [SerializeField] private SpriteRenderer card;
         [SerializeField] private SpriteRenderer icon;
-        [SerializeField] private float flipDuration = 0.25f;
+        
+        [SerializeField] private float flipDuration = 0.2f;
         [SerializeField] private AnimationCurve flipCurve = AnimationCurve.Linear(0, 0, 1, 1);
+        
         [SerializeField] private Sprite cardBackSprite;
         [SerializeField] private Sprite cardFrontSprite;
-        public float time;
 
         public Action<GameCard> OnCardClick;
-        public Action OnCardShown;
+        
+        public bool IsMatched { get; private set; }
 
-        private Quaternion startRotation;
-        private Quaternion endRotation;
+        private Quaternion _startRotation;
+        private Quaternion _endRotation;
 
-        private bool isFlipping;
-        private bool isFrontSideVisible; // Flag to track if the front side of the card is visible
+        private bool _isFlipping;
+        private bool _isFrontSideVisible; // Flag to track if the front side of the card is visible
 
 
         private void OnMouseDown()
@@ -32,9 +34,12 @@ namespace Code.Game.Card
 
         public void Flip()
         {
-            if (isFlipping)
+            Debug.LogError("Flip Called : "+GetName());
+            if (_isFlipping)
                 return;
             
+            Debug.LogError("Flip Started : "+GetName());
+
             // Start flipping animation
             StartCoroutine(AnimateFlip());
         }
@@ -56,56 +61,70 @@ namespace Code.Game.Card
 
         public void SetAsMatched()
         {
+            IsMatched = true;
+            
             Pool.ReleaseObject(gameObject);
         }
 
         private IEnumerator AnimateFlip()
         {
-            isFlipping = true;
+            _isFlipping = true;
             var elapsedTime = 0f;
 
-            startRotation = transform.rotation;
-            endRotation = startRotation * Quaternion.Euler(0, 90, 0);
+            _startRotation = transform.rotation;
+            _endRotation = _startRotation * Quaternion.Euler(0, 90, 0);
 
-            isFrontSideVisible = !isFrontSideVisible;
+            _isFrontSideVisible = !_isFrontSideVisible;
 
             while (elapsedTime < flipDuration)
             {
                 var t = flipCurve.Evaluate(elapsedTime / flipDuration);
-                transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+                transform.rotation = Quaternion.Slerp(_startRotation, _endRotation, t);
 
                 if (t >= 0.97f)
                 {
                     // Switch card sprite to front side if it's visible, otherwise switch to back side
-                    card.sprite = isFrontSideVisible ? cardFrontSprite : cardBackSprite;
-                    icon.gameObject.SetActive(isFrontSideVisible);
+                    card.sprite = _isFrontSideVisible ? cardFrontSprite : cardBackSprite;
+                    icon.gameObject.SetActive(_isFrontSideVisible);
                 }
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            transform.rotation = endRotation;
+            transform.rotation = _endRotation;
 
             // Set the start and end rotations for the second half of the flip
-            startRotation = endRotation;
-            endRotation = startRotation * Quaternion.Euler(0, -90, 0);
+            _startRotation = _endRotation;
+            _endRotation = _startRotation * Quaternion.Euler(0, -90, 0);
             elapsedTime = 0f;
 
             while (elapsedTime < flipDuration)
             {
                 var t = flipCurve.Evaluate(elapsedTime / flipDuration);
-                transform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+                transform.rotation = Quaternion.Slerp(_startRotation, _endRotation, t);
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            transform.rotation = endRotation;
-            if(isFrontSideVisible)
-                OnCardShown?.Invoke();
+            transform.rotation = _endRotation;
+            _isFlipping = false;
 
-            isFlipping = false;
+        }
+
+        public void OnObjectInit()
+        {
+            Reset();
+        }
+
+        private void Reset()
+        {
+            _isFlipping = false;
+            _isFrontSideVisible = false;
+            IsMatched = false;
+            card.sprite = cardBackSprite;
+            icon.gameObject.SetActive(false);
         }
 
         public SimpleObjectPool Pool { get; set; }

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e6d2f7f983bc4abe87043b9c5852123, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: 
+  NumberOfTurns: 5
   RowCount: 2
   ColumnCount: 3
-  CardImages:
-  - {fileID: 21300000, guid: 20b6ff486d68740ea87405f664e37346, type: 3}
-  - {fileID: 21300000, guid: 4020a6a054b084909adc77ab1f8f495c, type: 3}
-  - {fileID: 21300000, guid: 830abfdbdae4f4de6a39d9c2d916b8f1, type: 3}
+  CardSprites:
+  - {fileID: 21300000, guid: 1c13902fec72c47ce90f8c323dda290e, type: 3}
+  - {fileID: 21300000, guid: 6aea349338ae8419fac092e8b2101821, type: 3}
+  - {fileID: 21300000, guid: 54288678bd1534262b45713e47c75d46, type: 3}

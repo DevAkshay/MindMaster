@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e6d2f7f983bc4abe87043b9c5852123, type: 3}
   m_Name: Level_0
   m_EditorClassIdentifier: 
+  NumberOfTurns: 5
   RowCount: 2
   ColumnCount: 2
   CardSprites:

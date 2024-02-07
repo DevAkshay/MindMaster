@@ -24,7 +24,15 @@ namespace Code.Game.Controller
             if (generatedCard != null)
             {
                 cardMatchValidator.Initialize(generatedCard, levelData);
+                cardMatchValidator.OnGameOver += OnGameOver;
             }
+        }
+
+        private void OnGameOver()
+        {
+            //Testing
+            PlayerDataManager.Instance.currentLevel++;
+            StartGamePlay();
         }
 
         private void EndGamePlay()
