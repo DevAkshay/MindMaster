@@ -34,12 +34,9 @@ namespace Code.Game.Card
 
         public void Flip()
         {
-            Debug.LogError("Flip Called : "+GetName());
             if (_isFlipping)
                 return;
             
-            Debug.LogError("Flip Started : "+GetName());
-
             // Start flipping animation
             StartCoroutine(AnimateFlip());
         }

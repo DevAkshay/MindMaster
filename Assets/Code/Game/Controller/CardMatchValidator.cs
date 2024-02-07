@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Code.Game.Card;
+using Code.Game.Core;
 using Core.Level;
 using UnityEngine;
 
@@ -16,14 +17,15 @@ namespace Code.Game.Controller
 
         private List<GameCard> _generatedCards;
         
-        private int _remainingTurns;
-        private int _allowedTurnsCount;
-        private int _currentTurnCount;
+        private int _remainingAttempts;
+        private int _allowedAttemptCount;
+        private int _currentAttemptCount;
         
         private GameCard _firstSelectedCard;
         private GameCard _secondSelectedCard;
         
-        private float _matchCheckDelay = 0.6f;
+        private readonly float _matchCheckDelay = 0.6f;
+        private readonly float _initialCardPeekDuration = 3.0f;
         
         private enum GameState { Ready, CheckingMatch, Paused }
         private GameState _currentState = GameState.Ready;
@@ -31,14 +33,19 @@ namespace Code.Game.Controller
         public void Initialize(List<GameCard> generatedCards, LevelDataSO levelData)
         {
             _generatedCards = generatedCards;
-            _allowedTurnsCount = _remainingTurns = levelData.NumberOfTurns;
-            RegisterForCardClick();
+            _allowedAttemptCount = _remainingAttempts = levelData.NumberOfAttempts;
+            StartCoroutine(StartLevelCardPeek());
         }
 
-        private void RegisterForCardClick()
+        private IEnumerator StartLevelCardPeek()
         {
+            yield return new WaitForSeconds(0.5f);
+            foreach (var card in _generatedCards) card.Flip();
+            yield return new WaitForSeconds(_initialCardPeekDuration);
+
             foreach (var card in _generatedCards)
             {
+                card.Flip();
                 card.OnCardClick += OnCardClick;
             }
         }
@@ -63,7 +70,7 @@ namespace Code.Game.Controller
 
         private void CheckForMatch()
         {
-            UpdateOnTurnCount();
+            UpdateAttemptCount();
 
             if (_firstSelectedCard.Match(_secondSelectedCard.GetName()))
             {
@@ -96,23 +103,32 @@ namespace Code.Game.Controller
         }
 
         
-        private void UpdateOnTurnCount()
+        private void UpdateAttemptCount()
         {
-            _currentTurnCount++;
-            _remainingTurns = _allowedTurnsCount - _currentTurnCount;
+            _currentAttemptCount++;
+            _remainingAttempts = _allowedAttemptCount - _currentAttemptCount;
+            GameEvents.NotifyAttemptCountUpdated(_remainingAttempts);
         }
 
         private void CheckAboutGameOver()
         {
             if (!IsTurnAllowed() || IsLevelCleared())
             {
+                Reset();
                 OnGameOver?.Invoke();
             }
         }
         
+        private void Reset()
+        {
+            _remainingAttempts = 0;
+            _allowedAttemptCount = 0;
+            _currentAttemptCount = 0;
+        }
+        
         private bool IsTurnAllowed()
         {
-            return _remainingTurns > 0;
+            return _remainingAttempts > 0;
         }
 
         private bool IsLevelCleared()
