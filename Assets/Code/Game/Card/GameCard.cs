@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Code.Audio;
 using Code.Utils.Pooling;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ namespace Code.Game.Card
 
         private void OnMouseDown()
         {
+            AudioManager.Instance.PlaySfx("Game:Sfx:CardFlip");
             OnCardClick?.Invoke(this);
         }
 

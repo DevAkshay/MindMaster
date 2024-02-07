@@ -56,10 +56,7 @@ namespace Code.Utils.Pooling
             if (obj == null) obj = CreateObject();
 
             var poolObject = obj.GetComponent<IPoolObject>();
-            if (poolObject != null)
-            {
-                poolObject.OnObjectInit();
-            }
+            poolObject?.OnObjectInit();
             obj.SetActive(true);
             return obj;
         }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd3a9688b3645ca87724a811bdd03af, type: 3}
+  m_Name: AudioData
+  m_EditorClassIdentifier: 
+  audioEntries:
+  - id: Game:Music:Bgm
+    clip: {fileID: 8300000, guid: fade0e6a147d344ddab266e85a915b03, type: 3}
+  - id: Game:Sfx:CardFlip
+    clip: {fileID: 8300000, guid: 46d9db83407394fcb83caec96731e09c, type: 3}
+  - id: Game:Sfx:CardMatch
+    clip: {fileID: 8300000, guid: 039265014676b4991bb6cde20014d381, type: 3}
+  - id: Game:Sfx:CardMisMatch
+    clip: {fileID: 8300000, guid: 59befee36ea94436193ede98393a938d, type: 3}
+  - id: Game:Sfx:GameOver
+    clip: {fileID: 8300000, guid: c3444550c2be340889ef4d8138543f91, type: 3}

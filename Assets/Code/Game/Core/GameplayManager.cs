@@ -1,3 +1,4 @@
+using Code.Audio;
 using Code.Game.Controller;
 using Code.Game.Main;
 using Code.Level;
@@ -74,11 +75,13 @@ namespace Code.Game.Core
 
         private void OnCardMiss()
         {
+            AudioManager.Instance.PlaySfx("Game:Sfx:CardMisMatch");
             ScoreManager.Instance.CardMiss();
         }
 
         private void OnCardMatch()
         {
+            AudioManager.Instance.PlaySfx("Game:Sfx:CardMatch");
             ScoreManager.Instance.CardMatch();
         }
 

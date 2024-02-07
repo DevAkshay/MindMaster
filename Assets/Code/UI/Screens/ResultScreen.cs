@@ -1,3 +1,4 @@
+using Code.Audio;
 using Code.Game.Main;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Code.UI.Screens
         {
             base.OnShow();
             nextActionButton.onClick.AddListener(OnNextBtnClick);
+            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlaySfx("Game:Sfx:GameOver");
             SetData();
         }
 

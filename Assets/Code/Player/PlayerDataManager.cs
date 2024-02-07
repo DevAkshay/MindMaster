@@ -62,11 +62,9 @@ namespace Code.Player
         public List<PlayerLevelData> GetAllLevelData()
         {
             string jsonString = PlayerPrefs.GetString(LevelDataKey, "");
-            Debug.LogError("PlayerPrefs Json : "+jsonString);
             if (string.IsNullOrEmpty(jsonString)) return new List<PlayerLevelData>();
 
             PlayerLevelDataList levelDataList = JsonUtility.FromJson<PlayerLevelDataList>(jsonString);
-            Debug.LogError("PlayerLevelDataList count : "+levelDataList);
             return levelDataList?.levelDataList ?? new List<PlayerLevelData>();
         }
 
