@@ -5,22 +5,22 @@ namespace Code.Utils.Pooling
 {
     public class SimpleObjectPool : ISimpleObjectPool
     {
-        private GameObject _prefab;
-        private List<GameObject> _poolList;
-        private Transform _parent;
+        private readonly GameObject _prefab;
+        private readonly List<GameObject> _poolList;
+        private readonly Transform _parent;
 
         public SimpleObjectPool(GameObject prefab, int initialSize, Transform parent)
         {
-            this._prefab = prefab;
-            this._poolList = new List<GameObject>(initialSize);
-            this._parent = parent;
+            _prefab = prefab;
+            _poolList = new List<GameObject>(initialSize);
+            _parent = parent;
 
             InitializePool(initialSize);
         }
 
         private void InitializePool(int initialSize)
         {
-            for (int i = 0; i < initialSize; i++)
+            for (var i = 0; i < initialSize; i++)
             {
                 CreateObject();
             }
@@ -28,7 +28,13 @@ namespace Code.Utils.Pooling
 
         private GameObject CreateObject()
         {
-            GameObject obj = Object.Instantiate(_prefab, _parent);
+            var obj = Object.Instantiate(_prefab, _parent);
+            var poolObject = obj.GetComponent<IPoolObject>();
+            if (poolObject != null)
+            {
+                poolObject.Pool = this;
+            }
+
             obj.SetActive(false);
             _poolList.Add(obj);
             return obj;
@@ -39,20 +45,15 @@ namespace Code.Utils.Pooling
             GameObject obj = null;
 
             // Check if there's an inactive object in the pool
-            for (int i = 0; i < _poolList.Count; i++)
-            {
+            for (var i = 0; i < _poolList.Count; i++)
                 if (!_poolList[i].activeInHierarchy)
                 {
                     obj = _poolList[i];
                     break;
                 }
-            }
 
             // If no inactive object found, create a new one
-            if (obj == null)
-            {
-                obj = CreateObject();
-            }
+            if (obj == null) obj = CreateObject();
 
             obj.SetActive(true);
             return obj;
@@ -61,14 +62,12 @@ namespace Code.Utils.Pooling
         public void ReleaseObject(GameObject obj)
         {
             obj.SetActive(false);
+            obj.transform.SetParent(_parent);
         }
 
         public void ClearPool()
         {
-            for (int i = 0; i < _poolList.Count; i++)
-            {
-                Object.Destroy(_poolList[i]);
-            }
+            for (var i = 0; i < _poolList.Count; i++) Object.Destroy(_poolList[i]);
 
             _poolList.Clear();
         }

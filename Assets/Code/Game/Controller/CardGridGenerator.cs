@@ -21,20 +21,20 @@ namespace Code.Game.Controller
         private IObjectPoolManager _objectPoolManager;
         private List<GameCard> _generatedCards;
         
-        private void Start()
-        {
-            Initialize();
-        }
-
-        public void Initialize()
+        
+        public void Initialize(LevelDataSO levelData)
         {
             _objectPoolManager = ObjectPoolManager.Instance;
             _objectPoolManager.CreatePool(cardPrefab.name, cardPrefab, 25);
 
-            var levelData = LevelManager.Instance.GetLevel(PlayerDataManager.Instance.currentLevel);
             GenerateCardGrid(levelData.RowCount, levelData.ColumnCount);
             AssignSpritesToCards(levelData);
             AdjustCamera(levelData.RowCount, levelData.ColumnCount);
+        }
+        
+        public List<GameCard> GetGeneratedCards()
+        {
+            return _generatedCards;
         }
 
         private void GenerateCardGrid(int rows, int columns)

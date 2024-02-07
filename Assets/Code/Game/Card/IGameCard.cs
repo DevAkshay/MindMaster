@@ -6,7 +6,7 @@ namespace Code.Game.Card
     {
         public void Flip();
         public void SetIcon(Sprite sprite);
-        public void Match();
+        public bool Match(string cardIconName);
         public string GetName();
     } 
 }
