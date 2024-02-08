@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Code.Audio;
+using Code.Utils;
 using Code.Utils.Pooling;
 using UnityEngine;
 
@@ -29,7 +30,6 @@ namespace Code.Game.Card
 
         private void OnMouseDown()
         {
-            AudioManager.Instance.PlaySfx("Game:Sfx:CardFlip");
             OnCardClick?.Invoke(this);
         }
 
@@ -89,6 +89,7 @@ namespace Code.Game.Card
                     {
                         _isFrontSideVisible = !_isFrontSideVisible;
                         card.sprite = _isFrontSideVisible ? cardFrontSprite : cardBackSprite;
+                        card.color = _isFrontSideVisible ? Utilities.GetColorFromSpriteCenter(icon.sprite) : Color.white;
                         icon.gameObject.SetActive(_isFrontSideVisible);
                         break; // Break the loop and continue to the next iteration for the second half of the flip
                     }
@@ -119,6 +120,7 @@ namespace Code.Game.Card
             _isFrontSideVisible = false;
             IsMatched = false;
             card.sprite = cardBackSprite;
+            card.color = Color.white;
             icon.gameObject.SetActive(false);
         }
 

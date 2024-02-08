@@ -68,5 +68,26 @@ namespace Code.Utils
             finishedCallback();
         }
         
+        public static Color GetColorFromSpriteCenter(Sprite sprite, float offsetX = 0.05f, float offsetY = 0.05f)
+        {
+            Texture2D texture = sprite.texture;
+            Rect rect = sprite.textureRect;
+
+            if (!texture.isReadable)
+            {
+                Debug.LogError("Texture is not readable. Make sure Read/Write is enabled in import settings.");
+                return Color.white;
+            }
+
+            // Calculate offset position from the center point within the sprite's textureRect
+            int sampleX = Mathf.Clamp(Mathf.FloorToInt(rect.x + rect.width / 2 + rect.width * offsetX), 0, texture.width - 1);
+            int sampleY = Mathf.Clamp(Mathf.FloorToInt(rect.y + rect.height / 2 + rect.height * offsetY), 0, texture.height - 1);
+
+            Color offsetColor = texture.GetPixel(sampleX, sampleY);
+            Color darkerColor = offsetColor * 0.9f; //making it slight darker
+
+            return darkerColor;
+        }
+        
     }
 }

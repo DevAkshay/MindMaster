@@ -19,6 +19,7 @@ namespace Code.Game.Controller
         private IObjectPoolManager _objectPoolManager;
         private List<GameCard> _generatedCards;
         private Camera _mainCamera;
+        private readonly float _minCameraOrthographicSize = 6.5f;
 
         private void Awake()
         {
@@ -69,7 +70,8 @@ namespace Code.Game.Controller
             if (_mainCamera != null)
             {
                 var aspectRatio = _mainCamera.aspect;
-                _mainCamera.orthographicSize = Mathf.Max(desiredHeight / 2, desiredWidth / (2 * aspectRatio));
+                var calculatedOrthographicSize = Mathf.Max(desiredHeight / 2, desiredWidth / (2 * aspectRatio));
+                _mainCamera.orthographicSize = Mathf.Max(calculatedOrthographicSize, _minCameraOrthographicSize);
             }
         }
 

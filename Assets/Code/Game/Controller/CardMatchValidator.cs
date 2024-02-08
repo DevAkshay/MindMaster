@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Audio;
 using Code.Game.Card;
 using Code.Game.Core;
 using Core.Level;
@@ -26,6 +27,8 @@ namespace Code.Game.Controller
         
         private readonly float _matchCheckDelay = 0.6f;
         private readonly float _initialCardPeekDuration = 3.0f;
+
+        private const string CardClickAudioId = "Game:Sfx:CardFlip";
         
         private enum GameState { Ready, CheckingMatch, Paused }
         private GameState _currentState = GameState.Ready;
@@ -55,6 +58,7 @@ namespace Code.Game.Controller
             if (!IsTurnAllowed()) return;
             if (_currentState != GameState.Ready || gameCard == _firstSelectedCard) return;
 
+            AudioManager.Instance.PlaySfx(CardClickAudioId);
             gameCard.Flip();
             if (_firstSelectedCard == null)
             {
@@ -90,6 +94,9 @@ namespace Code.Game.Controller
         
         private void HandleMatch()
         {
+            _firstSelectedCard.OnCardClick -= OnCardClick;
+            _secondSelectedCard.OnCardClick -= OnCardClick;
+
             _firstSelectedCard.SetAsMatched();
             _secondSelectedCard.SetAsMatched();
             OnPairMatched?.Invoke();

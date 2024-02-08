@@ -18,6 +18,9 @@ namespace Code.Game.Core
         [SerializeField] private CardGridGenerator cardGridGenerator;
         [SerializeField] private CardMatchValidator cardMatchValidator;
 
+        private const string CardMatchAudioId = "Game:Sfx:CardMatch";
+        private const string CardMisMatchAudioId = "Game:Sfx:CardMisMatch";
+
         private PlayerDataManager PlayerDataManager => PlayerDataManager.Instance;
         private ScoreManager ScoreManager => ScoreManager.Instance;
 
@@ -81,13 +84,13 @@ namespace Code.Game.Core
 
         private void OnCardMiss()
         {
-            AudioManager.Instance.PlaySfx("Game:Sfx:CardMisMatch");
+            AudioManager.Instance.PlaySfx(CardMisMatchAudioId);
             ScoreManager.Instance.CardMiss();
         }
 
         private void OnCardMatch()
         {
-            AudioManager.Instance.PlaySfx("Game:Sfx:CardMatch");
+            AudioManager.Instance.PlaySfx(CardMatchAudioId);
             ScoreManager.Instance.CardMatch();
         }
 
@@ -98,7 +101,10 @@ namespace Code.Game.Core
             cardMatchValidator.OnGameOver -= OnGameOver;
             cardMatchValidator.OnPairMatched -= OnCardMatch;
             cardMatchValidator.OnPairMismatched -= OnCardMiss;
-            GameFlowManager.Instance.ChangeState(GameState.Result);
+            StartCoroutine(Utilities.Delay(0.5f, () =>
+            {
+                GameFlowManager.Instance.ChangeState(GameState.Result);
+            }));
         }
     }
 }
