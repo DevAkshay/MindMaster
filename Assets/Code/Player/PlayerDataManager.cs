@@ -122,7 +122,7 @@ namespace Code.Player
         {
             PlayerPrefs.DeleteKey(LevelDataKey);
             PlayerPrefs.Save();
-            _activeLevelIndex = -1; // Reset cached active level index when data is cleared
+            _activeLevelIndex = 0;
         }
     }
 }
