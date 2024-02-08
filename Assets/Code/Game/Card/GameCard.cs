@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Code.Audio;
 using Code.Utils;
 using Code.Utils.Pooling;
 using UnityEngine;
@@ -18,15 +17,17 @@ namespace Code.Game.Card
         [SerializeField] private Sprite cardBackSprite;
         [SerializeField] private Sprite cardFrontSprite;
 
-        public Action<GameCard> OnCardClick;
-
-        public bool IsMatched { get; private set; }
+        private readonly float _scaleDuration = 0.5f;
 
         private bool _isFlipping;
-        private bool _isFrontSideVisible; // Flag to track if the front side of the card is visible
+        private bool _isFrontSideVisible;
+        private Vector3 _cachedCardScale;
 
         private Quaternion _halfFlipRotation;
         private Quaternion _fullFlipRotation;
+
+        public Action<GameCard> OnCardClick;
+        public bool IsMatched { get; private set; }
 
         private void OnMouseDown()
         {
@@ -60,7 +61,7 @@ namespace Code.Game.Card
         public void SetAsMatched()
         {
             IsMatched = true;
-            ReleaseCardToPool();
+            StartCoroutine(MoveAndFadeOut());
         }
 
         public void ReleaseCardToPool()
@@ -89,7 +90,9 @@ namespace Code.Game.Card
                     {
                         _isFrontSideVisible = !_isFrontSideVisible;
                         card.sprite = _isFrontSideVisible ? cardFrontSprite : cardBackSprite;
-                        card.color = _isFrontSideVisible ? Utilities.GetColorFromSpriteCenter(icon.sprite) : Color.white;
+                        card.color = _isFrontSideVisible
+                            ? Utilities.GetColorFromSpriteCenter(icon.sprite)
+                            : Color.white;
                         icon.gameObject.SetActive(_isFrontSideVisible);
                         break; // Break the loop and continue to the next iteration for the second half of the flip
                     }
@@ -103,15 +106,42 @@ namespace Code.Game.Card
             _isFlipping = false;
         }
 
+        private IEnumerator MoveAndFadeOut()
+        {
+            var transform1 = card.transform;
+            var originalScale = Vector3.one * transform1.localScale.x;
+            var targetScale = originalScale * 1.1f;
+
+            // Scale up
+            float elapsedTime = 0;
+            while (elapsedTime < _scaleDuration)
+            {
+                if (elapsedTime < _scaleDuration / 2)
+                    transform.localScale = Vector3.one * Mathf.Lerp(originalScale.x, targetScale.x,
+                        elapsedTime / (_scaleDuration / 2));
+                else
+                    transform.localScale = Vector3.one * Mathf.Lerp(targetScale.x, 0,
+                        (elapsedTime - _scaleDuration / 2) / (_scaleDuration / 2));
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.localScale = Vector3.zero;
+
+            ReleaseCardToPool();
+        }
+
 
         public void OnObjectReturned()
         {
-            
+            card.transform.localScale = _cachedCardScale;
         }
 
         public void OnObjectInit()
         {
             Reset();
+            _cachedCardScale = card.transform.localScale;
         }
 
         private void Reset()

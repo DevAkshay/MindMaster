@@ -101,10 +101,7 @@ namespace Code.Game.Core
             cardMatchValidator.OnGameOver -= OnGameOver;
             cardMatchValidator.OnPairMatched -= OnCardMatch;
             cardMatchValidator.OnPairMismatched -= OnCardMiss;
-            StartCoroutine(Utilities.Delay(0.5f, () =>
-            {
-                GameFlowManager.Instance.ChangeState(GameState.Result);
-            }));
+            GameFlowManager.Instance.ChangeState(GameState.Result);
         }
     }
 }

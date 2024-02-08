@@ -5,6 +5,7 @@ using System.Linq;
 using Code.Audio;
 using Code.Game.Card;
 using Code.Game.Core;
+using Code.Utils;
 using Core.Level;
 using UnityEngine;
 
@@ -122,12 +123,14 @@ namespace Code.Game.Controller
             if (!IsTurnAllowed() || IsLevelCleared())
             {
                 Reset();
-                foreach (var card in _generatedCards)
+                StartCoroutine(Utilities.Delay(0.7f, () =>
                 {
-                    card.ReleaseCardToPool();
-                }
-                
-                OnGameOver?.Invoke(IsLevelCleared());
+                    foreach (var card in _generatedCards)
+                    {
+                        card.ReleaseCardToPool();
+                    }
+                    OnGameOver?.Invoke(IsLevelCleared());
+                }));
             }
         }
         

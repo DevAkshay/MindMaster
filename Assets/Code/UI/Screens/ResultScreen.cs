@@ -42,7 +42,7 @@ namespace Code.UI.Screens
             lineSeparator.SetActive(false);
             comboPanel.SetActive(false);
             
-            resultTitleText.text = "0";
+            scoreValueText.text = "0";
             combosValueText.text = "0";
 
             StartCoroutine(AnimateScore(_scoreManager.Score, scoreValueText, null));

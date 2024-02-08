@@ -17,12 +17,12 @@ MonoBehaviour:
   RowCount: 3
   ColumnCount: 2
   CardSprites:
-  - {fileID: 21300000, guid: b53ba0c0817b04f6a930193341f2eb42, type: 3}
-  - {fileID: 21300000, guid: 76c18959ca14e49f29b7752b800a7374, type: 3}
   - {fileID: 21300000, guid: c774d8f1b79614a569441b878173c2ab, type: 3}
   - {fileID: 21300000, guid: ae1cd0de10b0545fcad08edb69282cad, type: 3}
+  - {fileID: 21300000, guid: 797e1f315360a4813b51bf20d16bbe62, type: 3}
   - {fileID: 21300000, guid: 2b6a37fc015b84c569b578106d12fb7e, type: 3}
+  - {fileID: 21300000, guid: b53ba0c0817b04f6a930193341f2eb42, type: 3}
+  - {fileID: 21300000, guid: af2fdde105b7841eea0d91c30338bb15, type: 3}
   - {fileID: 21300000, guid: 8e6091d09f2d8490c9625a491bba465c, type: 3}
   - {fileID: 21300000, guid: a798dd3456e194c128c062a2d950ac3b, type: 3}
-  - {fileID: 21300000, guid: af2fdde105b7841eea0d91c30338bb15, type: 3}
-  - {fileID: 21300000, guid: ae1cd0de10b0545fcad08edb69282cad, type: 3}
+  - {fileID: 21300000, guid: 76c18959ca14e49f29b7752b800a7374, type: 3}
