@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PointsPerMatch: 3
   NumberOfAttempts: 10
-  RowCount: 4
-  ColumnCount: 2
+  RowCount: 3
+  ColumnCount: 4
   CardSprites:
-  - {fileID: 21300000, guid: 6aea349338ae8419fac092e8b2101821, type: 3}
-  - {fileID: 21300000, guid: 54288678bd1534262b45713e47c75d46, type: 3}
-  - {fileID: 21300000, guid: 53cd722fa014f4db584de793699bcbbc, type: 3}
-  - {fileID: 21300000, guid: 7e1d23058d06a46d39bebbf97182da7d, type: 3}
-  - {fileID: 21300000, guid: 2b6a37fc015b84c569b578106d12fb7e, type: 3}
   - {fileID: 21300000, guid: 7796f08dc38e4481da1b92c660905f85, type: 3}
-  - {fileID: 21300000, guid: f0e497282bf6a4543b4c3a967561680d, type: 3}
+  - {fileID: 21300000, guid: 7e1d23058d06a46d39bebbf97182da7d, type: 3}
   - {fileID: 21300000, guid: 9449b762a37ba45c4a39d89195b39780, type: 3}
-  - {fileID: 21300000, guid: a798dd3456e194c128c062a2d950ac3b, type: 3}
-  - {fileID: 21300000, guid: d80fb507b65a045209ebd763f0741f86, type: 3}
+  - {fileID: 21300000, guid: 6aea349338ae8419fac092e8b2101821, type: 3}
   - {fileID: 21300000, guid: 797e1f315360a4813b51bf20d16bbe62, type: 3}
   - {fileID: 21300000, guid: dd93e483077394e8e921ca2eb7fb8268, type: 3}
+  - {fileID: 21300000, guid: 54288678bd1534262b45713e47c75d46, type: 3}
+  - {fileID: 21300000, guid: d80fb507b65a045209ebd763f0741f86, type: 3}
+  - {fileID: 21300000, guid: 2b6a37fc015b84c569b578106d12fb7e, type: 3}
+  - {fileID: 21300000, guid: 53cd722fa014f4db584de793699bcbbc, type: 3}
+  - {fileID: 21300000, guid: a798dd3456e194c128c062a2d950ac3b, type: 3}
+  - {fileID: 21300000, guid: f0e497282bf6a4543b4c3a967561680d, type: 3}

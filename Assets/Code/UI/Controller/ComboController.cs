@@ -11,7 +11,7 @@ namespace Code.UI.Controller
 
         private IObjectPoolManager _objectPoolManager;
 
-        public void Initialize()
+        public void Awake()
         {
             _objectPoolManager = ObjectPoolManager.Instance;
             _objectPoolManager.CreatePool(comboItem.name, comboItem, 2);

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Level_0
   m_EditorClassIdentifier: 
   PointsPerMatch: 1
-  NumberOfAttempts: 4
+  NumberOfAttempts: 3
   RowCount: 2
   ColumnCount: 2
   CardSprites:
+  - {fileID: 21300000, guid: 2b6a37fc015b84c569b578106d12fb7e, type: 3}
   - {fileID: 21300000, guid: 4020a6a054b084909adc77ab1f8f495c, type: 3}
   - {fileID: 21300000, guid: 20b6ff486d68740ea87405f664e37346, type: 3}
   - {fileID: 21300000, guid: 9449b762a37ba45c4a39d89195b39780, type: 3}
   - {fileID: 21300000, guid: dd93e483077394e8e921ca2eb7fb8268, type: 3}
-  - {fileID: 21300000, guid: 2b6a37fc015b84c569b578106d12fb7e, type: 3}

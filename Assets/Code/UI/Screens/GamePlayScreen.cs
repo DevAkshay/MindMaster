@@ -28,7 +28,6 @@ namespace Code.UI.Screens
         {
             base.OnShow();
             Initialize();
-            comboController.Initialize();
             SubscribeGameEvents();
         }
 

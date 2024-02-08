@@ -14,6 +14,7 @@ namespace Code.Game.Core
 {
     public class GameplayManager : GenericSingleton<GameplayManager>
     {
+        [SerializeField] private LevelCompletePopup levelCompletePopup;
         [SerializeField] private CardGridGenerator cardGridGenerator;
         [SerializeField] private CardMatchValidator cardMatchValidator;
 
@@ -44,6 +45,7 @@ namespace Code.Game.Core
             var levelData = LevelManager.Instance.GetLevel(LevelIndex);
             if (levelData == null)
             {
+                levelCompletePopup.Show();
                 Debug.LogError($"Level data of Level index {LevelIndex} is null");
                 return;
             }

@@ -24,6 +24,10 @@ namespace Code.UI.Screens
             
             gameStartButtonObjCanvasGroup.alpha = 0;
             gameMessageTextCanvasGroup.alpha = 0;
+            var gameLogoLocalPosition = gameLogoObj.transform.localPosition;
+            gameLogoLocalPosition = new Vector3(gameLogoLocalPosition.x, 142.27f,
+                gameLogoLocalPosition.x);
+            gameLogoObj.transform.localPosition = gameLogoLocalPosition;
 
             StartCoroutine(Utilities.MoveYCoroutine(gameLogoObj.transform, 443,1f, 0.5f, () =>
             {

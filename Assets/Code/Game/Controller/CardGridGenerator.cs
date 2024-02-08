@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Code.Game.Card;
-using Code.Level;
-using Code.Player;
 using Code.Utils;
 using Code.Utils.Pooling;
 using Core.Level;
@@ -17,7 +14,7 @@ namespace Code.Game.Controller
 
         private readonly float _cardLength = 0.4f;
         private readonly float _edgePadding = 2f;
-        private readonly float _topPadding = 1.2f;
+        private readonly float _topPadding = 1.4f;
 
         private IObjectPoolManager _objectPoolManager;
         private List<GameCard> _generatedCards;
@@ -37,7 +34,7 @@ namespace Code.Game.Controller
             AssignSpritesToCards(levelData);
             AdjustCamera(levelData.RowCount, levelData.ColumnCount);
         }
-        
+
         public List<GameCard> GetGeneratedCards()
         {
             return _generatedCards;
@@ -48,17 +45,16 @@ namespace Code.Game.Controller
             var gridWidth = columns * cardSpacing;
             var gridHeight = rows * cardSpacing;
 
-            Vector3 startPosition = new Vector3(-gridWidth / 2 + cardSpacing / 2, gridHeight / 2 - cardSpacing / 2 - _topPadding, 0f);
-            
-            for (int row = 0; row < rows; row++)
+            var startPosition = new Vector3(-gridWidth / 2 + cardSpacing / 2,
+                gridHeight / 2 - cardSpacing / 2 - _topPadding, 0f);
+
+            for (var row = 0; row < rows; row++)
+            for (var col = 0; col < columns; col++)
             {
-                for (int col = 0; col < columns; col++)
-                {
-                    Vector3 position = startPosition + new Vector3(col * cardSpacing, -row * cardSpacing, 0f);
-                    var card = _objectPoolManager.GetObjectFromPool(cardPrefab.name, position, Quaternion.identity);
-                    card.transform.SetParent(transform);
-                    _generatedCards.Add(card.GetComponent<GameCard>());
-                }
+                var position = startPosition + new Vector3(col * cardSpacing, -row * cardSpacing, 0f);
+                var card = _objectPoolManager.GetObjectFromPool(cardPrefab.name, position, Quaternion.identity);
+                card.transform.SetParent(transform);
+                _generatedCards.Add(card.GetComponent<GameCard>());
             }
         }
 
@@ -69,7 +65,7 @@ namespace Code.Game.Controller
 
             var desiredWidth = totalCardWidth + _edgePadding;
             var desiredHeight = totalCardHeight + _edgePadding + _topPadding;
-            
+
             if (_mainCamera != null)
             {
                 var aspectRatio = _mainCamera.aspect;
@@ -89,17 +85,13 @@ namespace Code.Game.Controller
             for (var i = 0; i < numCardsNeeded; i++)
             {
                 selectedImages.Add(cardSprites[i]);
-                selectedImages.Add(cardSprites[i]); 
+                selectedImages.Add(cardSprites[i]);
             }
 
             Utilities.Shuffle(selectedImages);
 
             // Assign each card in the grid a sprite from the shuffled list of images
-            for (var i = 0; i < _generatedCards.Count; i++)
-            {
-                _generatedCards[i].SetIcon(selectedImages[i]);
-            }
+            for (var i = 0; i < _generatedCards.Count; i++) _generatedCards[i].SetIcon(selectedImages[i]);
         }
     }
-
 }

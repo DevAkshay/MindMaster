@@ -15,8 +15,10 @@ namespace Code.UI.Screens
         [SerializeField] private TMP_Text resultTitleText;
         [SerializeField] private TMP_Text scoreValueText;
         [SerializeField] private TMP_Text combosValueText;
-        [SerializeField] private Button nextActionButton;
         [SerializeField] private TMP_Text nextActionBtnText;
+
+        [SerializeField] private Button nextActionButton;
+        [SerializeField] private Button homeButton;
 
         private GameplayManager _gameplayManager => GameplayManager.Instance;
         private ScoreManager _scoreManager => ScoreManager.Instance;
@@ -25,6 +27,8 @@ namespace Code.UI.Screens
         {
             base.OnShow();
             nextActionButton.onClick.AddListener(OnNextActionBtnClick);
+            homeButton.onClick.AddListener(OnHomeBtnClick);
+            
             AudioManager.Instance.StopMusic();
             AudioManager.Instance.PlaySfx("Game:Sfx:GameOver");
 
@@ -36,6 +40,11 @@ namespace Code.UI.Screens
             nextActionBtnText.text = hasPlayerWon ? "PLAY NEXT" : "RETRY";
         }
 
+        private void OnHomeBtnClick()
+        {
+            GameFlowManager.Instance.ChangeState(GameState.MainMenu);
+        }
+
         private void OnNextActionBtnClick()
         {
             GameFlowManager.Instance.ChangeState(GameState.Gameplay);
@@ -45,6 +54,7 @@ namespace Code.UI.Screens
         {
             base.OnHide();
             nextActionButton.onClick.RemoveAllListeners();
+            homeButton.onClick.RemoveAllListeners();
         }
     }
 }
