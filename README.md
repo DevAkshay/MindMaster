@@ -14,7 +14,7 @@ Prefer playing on your mobile device? Download the Android app from the link bel
 
 Watch the Memory Master Mind game in action
 
-- [Watch Now]((https://github.com/DevAkshay/MindMaster/assets/24504400/3edf5e45-4723-4686-83cd-1136023a51b5))
+- [Watch Now](https://github.com/DevAkshay/MindMaster/assets/24504400/3edf5e45-4723-4686-83cd-1136023a51b5)
 
 
 
