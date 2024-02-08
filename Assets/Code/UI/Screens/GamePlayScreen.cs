@@ -41,7 +41,7 @@ namespace Code.UI.Screens
             _totalAttempts = levelData.NumberOfAttempts;
 
             currentLevelText.text = (activeLevelIndex + 1).ToString();
-            attemptProgressCountText.text = "0/" + _totalAttempts;
+            attemptProgressCountText.text = $"{_totalAttempts}/{_totalAttempts}";
             attemptDescriptionText.text = $"You have {_totalAttempts} attempts to match all cards";
         }
 
@@ -62,7 +62,7 @@ namespace Code.UI.Screens
         {
             var attemptsUsed = _totalAttempts - remainingAttempts;
 
-            attemptProgressCountText.text = $"{attemptsUsed}/{_totalAttempts}";
+            attemptProgressCountText.text = $"{remainingAttempts}/{_totalAttempts}";
             attemptDescriptionText.text = $"You have {remainingAttempts} attempts to match all cards";
 
             var progress = 1 - (float)attemptsUsed / _totalAttempts;

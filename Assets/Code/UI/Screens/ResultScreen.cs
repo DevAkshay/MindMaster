@@ -19,6 +19,7 @@ namespace Code.UI.Screens
         [SerializeField] private TMP_Text combosValueText;
         [SerializeField] private TMP_Text nextActionBtnText;
 
+        [SerializeField] private GameObject lineSeparator;
         [SerializeField] private GameObject comboPanel;
 
         [SerializeField] private Button nextActionButton;
@@ -38,17 +39,20 @@ namespace Code.UI.Screens
             AudioManager.Instance.StopMusic();
             AudioManager.Instance.PlaySfx(GameOverAudioId);
 
+            lineSeparator.SetActive(false);
             comboPanel.SetActive(false);
-            combosValueText.text = _scoreManager.TotalCombos.ToString();
-
+            
             resultTitleText.text = "0";
-            StartCoroutine(AnimateScore(_scoreManager.Score, () =>
+            combosValueText.text = "0";
+
+            StartCoroutine(AnimateScore(_scoreManager.Score, scoreValueText, null));
+
+            if (_scoreManager.TotalCombos > 0)
             {
-                StartCoroutine(Utilities.Delay(0.5f, () =>
-                {
-                    comboPanel.SetActive(_scoreManager.TotalCombos > 0);
-                }));
-            }));
+                lineSeparator.SetActive(true);
+                comboPanel.SetActive(true);
+                StartCoroutine(AnimateScore(_scoreManager.TotalCombos, combosValueText,null));
+            }
 
             var hasPlayerWon = _gameplayManager.GameResultData.isCompleted;
             resultTitleText.text = hasPlayerWon ? "YOU WIN" : "YOU LOST";
@@ -65,7 +69,7 @@ namespace Code.UI.Screens
             GameFlowManager.Instance.ChangeState(GameState.Gameplay);
         }
 
-        private IEnumerator AnimateScore(int finalScore, Action onComplete)
+        private IEnumerator AnimateScore(int finalScore, TMP_Text textAsset, Action onComplete)
         {
             var duration = 0.5f; 
             float elapsedTime = 0;
@@ -79,12 +83,12 @@ namespace Code.UI.Screens
                 t = Mathf.SmoothStep(0, 1, t);
 
                 var displayedScore = Mathf.RoundToInt(Mathf.Lerp(0, finalScore, t));
-                scoreValueText.text = displayedScore.ToString();
+                textAsset.text = displayedScore.ToString();
 
                 yield return null;
             }
 
-            scoreValueText.text = finalScore.ToString();
+            textAsset.text = finalScore.ToString();
 
             onComplete?.Invoke();
         }
