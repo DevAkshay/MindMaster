@@ -95,9 +95,6 @@ namespace Code.Game.Controller
         
         private void HandleMatch()
         {
-            _firstSelectedCard.OnCardClick -= OnCardClick;
-            _secondSelectedCard.OnCardClick -= OnCardClick;
-
             _firstSelectedCard.SetAsMatched();
             _secondSelectedCard.SetAsMatched();
             OnPairMatched?.Invoke();
@@ -127,6 +124,7 @@ namespace Code.Game.Controller
                 {
                     foreach (var card in _generatedCards)
                     {
+                        card.OnCardClick -= OnCardClick;
                         card.ReleaseCardToPool();
                     }
                     OnGameOver?.Invoke(IsLevelCleared());

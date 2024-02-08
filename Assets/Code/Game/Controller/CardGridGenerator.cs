@@ -30,7 +30,14 @@ namespace Code.Game.Controller
 
         public void Initialize(LevelDataSO levelData)
         {
-            _generatedCards = new List<GameCard>(levelData.RowCount * levelData.ColumnCount);
+            if (_generatedCards != null)
+            {
+                _generatedCards.Clear();
+            }
+            else
+            {
+                _generatedCards = new List<GameCard>(levelData.RowCount * levelData.ColumnCount);
+            }
             GenerateCardGrid(levelData.RowCount, levelData.ColumnCount);
             AssignSpritesToCards(levelData);
             AdjustCamera(levelData.RowCount, levelData.ColumnCount);

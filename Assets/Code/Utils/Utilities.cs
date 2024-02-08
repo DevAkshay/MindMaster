@@ -18,14 +18,14 @@ namespace Code.Utils
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
-        
+
         public static IEnumerator FadeInCoroutine(float duration, CanvasGroup canvasGroup)
         {
             canvasGroup.gameObject.SetActive(true);
 
             canvasGroup.alpha = 0f;
 
-            float elapsedTime = 0f;
+            var elapsedTime = 0f;
 
             while (elapsedTime < duration)
             {
@@ -36,22 +36,23 @@ namespace Code.Utils
 
             canvasGroup.alpha = 1f;
         }
-        
-        public static IEnumerator MoveYCoroutine(Transform obj, float targetY, float duration, float delay, Action onComplete)
+
+        public static IEnumerator MoveYCoroutine(Transform obj, float targetY, float duration, float delay,
+            Action onComplete)
         {
             yield return new WaitForSeconds(delay);
-            float startTime = Time.time;
-            float endTime = startTime + duration;
+            var startTime = Time.time;
+            var endTime = startTime + duration;
 
             var position = obj.localPosition;
-            Vector3 startPosition = position;
-            Vector3 endPosition = new Vector3(position.x, targetY, position.z);
+            var startPosition = position;
+            var endPosition = new Vector3(position.x, targetY, position.z);
 
             while (Time.time < endTime)
             {
-                float t = (Time.time - startTime) / duration;
+                var t = (Time.time - startTime) / duration;
 
-                float easeT = 1 - (1 - t) * (1 - t);
+                var easeT = 1 - (1 - t) * (1 - t);
 
                 obj.localPosition = Vector3.Lerp(startPosition, endPosition, easeT);
 
@@ -61,17 +62,17 @@ namespace Code.Utils
             obj.localPosition = endPosition;
             onComplete?.Invoke();
         }
-        
+
         public static IEnumerator Delay(float delayInSeconds, Action finishedCallback)
         {
             yield return new WaitForSeconds(delayInSeconds);
             finishedCallback();
         }
-        
+
         public static Color GetColorFromSpriteCenter(Sprite sprite, float offsetX = 0.05f, float offsetY = 0.05f)
         {
-            Texture2D texture = sprite.texture;
-            Rect rect = sprite.textureRect;
+            var texture = sprite.texture;
+            var rect = sprite.textureRect;
 
             if (!texture.isReadable)
             {
@@ -80,14 +81,15 @@ namespace Code.Utils
             }
 
             // Calculate offset position from the center point within the sprite's textureRect
-            int sampleX = Mathf.Clamp(Mathf.FloorToInt(rect.x + rect.width / 2 + rect.width * offsetX), 0, texture.width - 1);
-            int sampleY = Mathf.Clamp(Mathf.FloorToInt(rect.y + rect.height / 2 + rect.height * offsetY), 0, texture.height - 1);
+            var sampleX = Mathf.Clamp(Mathf.FloorToInt(rect.x + rect.width / 2 + rect.width * offsetX), 0,
+                texture.width - 1);
+            var sampleY = Mathf.Clamp(Mathf.FloorToInt(rect.y + rect.height / 2 + rect.height * offsetY), 0,
+                texture.height - 1);
 
-            Color offsetColor = texture.GetPixel(sampleX, sampleY);
-            Color darkerColor = offsetColor * 0.9f; //making it slight darker
+            var offsetColor = texture.GetPixel(sampleX, sampleY);
+            var darkerColor = offsetColor * 0.9f; //making it slight darker
 
             return darkerColor;
         }
-        
     }
 }
